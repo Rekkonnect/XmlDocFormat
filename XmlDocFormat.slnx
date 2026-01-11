@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/XmlDocFormat.Core/XmlDocFormat.Core.csproj" />
+    <Project Path="src/XmlDocFormat.Cli/XmlDocFormat.Cli.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/XmlDocFormat.Core.Tests/XmlDocFormat.Core.Tests.csproj" />
+    <Project Path="test/XmlDocFormat.Cli.Tests/XmlDocFormat.Cli.Tests.csproj" Id="cb2761ff-2fc5-40e6-b927-234debf332af" />
+  </Folder>
+</Solution>

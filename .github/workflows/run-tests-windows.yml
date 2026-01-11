@@ -1,0 +1,20 @@
+name: run-tests-windows
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  run:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Run Core tests
+      run: dotnet test --project test/XmlDocFormat.Core.Tests/XmlDocFormat.Core.Tests.csproj
+
+    - name: Run CLI tests
+      run: dotnet test --project test/XmlDocFormat.Cli.Tests/XmlDocFormat.Cli.Tests.csproj
