@@ -4,9 +4,16 @@ public static class CommandCancellationHelpers
 {
     public static void AugmentCancellation(ref CancellationToken cancellationToken)
     {
-        var cancelKeyPressSource = new CancellationTokenSource();
+        var cancelKeyPressSource = CreateCancelKeyTokenSource();
         var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(
             cancelKeyPressSource.Token, cancellationToken);
+
+        cancellationToken = linkedSource.Token;
+    }
+
+    public static CancellationTokenSource CreateCancelKeyTokenSource()
+    {
+        var cancelKeyPressSource = new CancellationTokenSource();
 
         Console.CancelKeyPress += (_, e) =>
         {
@@ -15,6 +22,6 @@ public static class CommandCancellationHelpers
             Console.WriteLine("Cancellation requested...");
         };
 
-        cancellationToken = linkedSource.Token;
+        return cancelKeyPressSource;
     }
 }

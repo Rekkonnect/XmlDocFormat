@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XmlDocFormat.InternalGenerators": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\..\\src\\XmlDocFormat.Core\\XmlDocFormat.Core.csproj"
+    }
+  }
+}

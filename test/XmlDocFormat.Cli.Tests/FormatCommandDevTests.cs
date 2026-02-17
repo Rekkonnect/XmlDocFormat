@@ -16,7 +16,8 @@ public sealed class FormatCommandDevTests : BaseCliTests
 
         var result = await context.RunAsync(
         [
-            "format", @"example-source.cs",
+            "format", @"D:\repos\Rekkonnect\Garyon\",
+            "-r",
             "-l", "80",
         ]);
 

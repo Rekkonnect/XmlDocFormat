@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace XmlDocFormat.Core;
+﻿namespace XmlDocFormat.Core;
 
 public class XmlDocFormatOptions
 {
@@ -24,14 +22,6 @@ public class XmlDocFormatOptions
             field = value;
         }
     } = 80;
-
-    /// <summary>
-    /// An optional tag comparer, that compares <see cref="XmlDocTag"/>
-    /// instances, representing the actual documentation tags.
-    /// Such tags include summary, remarks, param, typeparam, returns, etc.,
-    /// but not content tags like see or paramref.
-    /// </summary>
-    public IComparer<XmlDocTag>? TagComparer { get; set; }
 
     /// <summary>
     /// Determines whether content lines may be merged together,
