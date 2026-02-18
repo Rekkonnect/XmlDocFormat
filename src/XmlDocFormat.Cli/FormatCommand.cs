@@ -77,8 +77,8 @@ public class FormatCommand(
         if (settings.UsesDirectoryPath)
         {
             var extensionGroups = mappings
-                .GroupBy(m => fileSystem.Path.GetExtension(m.Source))
-                .ToDictionary(s => s.Key, s => s.Count());
+                .GroupBy(m => fileSystem.Path.GetExtension(m.Source), StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(s => s.Key, s => s.Count(), StringComparer.OrdinalIgnoreCase);
 
             var csFiles = extensionGroups.GetValueOrDefault(SourceFileExtensionFacts.CSharp);
             var vbFiles = extensionGroups.GetValueOrDefault(SourceFileExtensionFacts.VisualBasic);

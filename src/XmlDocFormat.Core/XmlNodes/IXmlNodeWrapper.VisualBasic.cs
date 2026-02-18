@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using System.Xml.Linq;
 using XmlDocFormat.InternalGenerators.Core;
 
 namespace XmlDocFormat.Core.XmlNodes;

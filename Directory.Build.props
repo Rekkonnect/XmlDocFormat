@@ -1,0 +1,8 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <InternalGeneratorsPackageId>XmlDocFormat.InternalGenerators</InternalGeneratorsPackageId>
+    <InternalGeneratorsVersion>0.2.0</InternalGeneratorsVersion>
+  </PropertyGroup>
+
+</Project>

@@ -58,7 +58,7 @@ public sealed class ItemCountTests
             ExpectedDisplayString: "3 *.txt, 10 *.docx and 5 *.pdf");
     }
 
-    public sealed record class ItemCountTestCase(
+    public readonly record struct ItemCountTestCase(
         ItemCountCollection ItemCounts,
         string ExpectedDisplayString)
     {

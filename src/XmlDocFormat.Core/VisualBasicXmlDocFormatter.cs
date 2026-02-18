@@ -1,5 +1,4 @@
-﻿using Garyon.Extensions;
-using Garyon.Objects;
+﻿using Garyon.Objects;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;

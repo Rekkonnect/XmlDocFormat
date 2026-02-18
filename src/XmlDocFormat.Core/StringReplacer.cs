@@ -1,9 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using System.Text;
+﻿using System.Text;
 
 namespace XmlDocFormat.Core;
 
+[GaryonUtility]
 public class StringReplacer
 {
     public virtual string Replace(string source, IEnumerable<StringReplacement> replacements)

@@ -1,6 +1,4 @@
-﻿using System.Security;
-
-namespace XmlDocFormat.Core;
+﻿namespace XmlDocFormat.Core;
 
 public sealed class HybridXmlDocFormatter(XmlDocFormatOptions options)
 {

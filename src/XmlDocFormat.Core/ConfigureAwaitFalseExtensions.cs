@@ -2,6 +2,7 @@
 
 namespace XmlDocFormat.Core;
 
+[GaryonUtility]
 public static class ConfigureAwaitFalseExtensions
 {
     extension(Task task)

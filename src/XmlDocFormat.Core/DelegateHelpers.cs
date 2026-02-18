@@ -1,5 +1,6 @@
 ﻿namespace XmlDocFormat.Core;
 
+[GaryonUtility]
 public static class DelegateHelpers
 {
     public static void Try(Action action)

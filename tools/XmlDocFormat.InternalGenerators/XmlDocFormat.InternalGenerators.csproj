@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <PackageId>$(InternalGeneratorsPackageId)</PackageId>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
-    <Version>0.2.0</Version>
+    <Version>$(InternalGeneratorsVersion)</Version>
 
     <!-- Special properties for analyzer packages. -->
     <IncludeBuildOutput>false</IncludeBuildOutput>

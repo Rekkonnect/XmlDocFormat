@@ -89,7 +89,7 @@ public sealed class CliCommand(string command, string? workingDirectory = null)
         public bool IsSuccess => ExitCode is 0;
         public bool IsFailure => ExitCode is not 0;
 
-        public int ExitCode => Process.ExitCode;
+        public new int ExitCode => Process.ExitCode;
 
         public string GetOutputString()
         {

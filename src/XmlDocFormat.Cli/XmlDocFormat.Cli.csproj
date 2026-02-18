@@ -18,7 +18,7 @@
     <Copyright>© 2026 Rekkonnect</Copyright>
     <Authors>Rekkonnect</Authors>
 
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>xmldoc, xml, documentation, csharp, format, cli, tool</PackageTags>
@@ -40,6 +40,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--
+    Not directly usable; just an explicit reference to force this
+    project be built after the generators project is packaged
+    -->
+    <ProjectReference
+      Include="..\..\tools\XmlDocFormat.InternalGenerators\XmlDocFormat.InternalGenerators.csproj"
+      PrivateAssets="all" />
     <ProjectReference Include="..\XmlDocFormat.Core\XmlDocFormat.Core.csproj" />
   </ItemGroup>
 
