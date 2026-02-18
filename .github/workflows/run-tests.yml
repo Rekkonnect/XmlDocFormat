@@ -20,8 +20,5 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
 
-    - name: Restore
-      run: dotnet restore
-
     - name: Run All Tests
       run: dotnet test --solution ./
