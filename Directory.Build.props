@@ -4,7 +4,7 @@
     <InternalGeneratorsPackageId>XmlDocFormat.InternalGenerators</InternalGeneratorsPackageId>
     <InternalGeneratorsVersion>0.2.0</InternalGeneratorsVersion>
 
-    <InternalGeneratorsLocation>$(SolutionDir)artifacts\generators</InternalGeneratorsLocation>
+    <InternalGeneratorsLocation>$(SolutionDir)artifacts\generators\</InternalGeneratorsLocation>
   </PropertyGroup>
 
   <Target
