@@ -40,13 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--
-    Not directly usable; just an explicit reference to force this
-    project be built after the generators project is packaged
-    -->
-    <ProjectReference
-      Include="..\..\tools\XmlDocFormat.InternalGenerators\XmlDocFormat.InternalGenerators.csproj"
-      PrivateAssets="all" />
     <ProjectReference Include="..\XmlDocFormat.Core\XmlDocFormat.Core.csproj" />
   </ItemGroup>
 

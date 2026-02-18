@@ -16,6 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--
+    Not directly usable; just an explicit reference to force this
+    project be built after the generators project is packaged
+    -->
+    <ProjectReference
+      Include="..\..\tools\XmlDocFormat.InternalGenerators\XmlDocFormat.InternalGenerators.csproj"
+      PrivateAssets="all"
+      ReferenceOutputAssembly="false" />
+
     <ProjectReference Include="..\..\tools\XmlDocFormat.InternalGenerators.Core\XmlDocFormat.InternalGenerators.Core.csproj" />
   </ItemGroup>
 
