@@ -28,6 +28,9 @@ jobs:
 
     - name: Restore Solution
       run: dotnet restore ./XmlDocFormat.slnx --verbosity detailed
+    
+    - name: Build Solution
+      run: dotnet build --force-rerun-analyzers
 
     - name: Run All Tests
-      run: dotnet test --solution ./
+      run: dotnet test --solution ./ --no-build
