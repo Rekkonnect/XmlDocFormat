@@ -1,6 +1,7 @@
 ﻿using Garyon.Extensions;
 using Garyon.Objects;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace XmlDocFormat.Core;
 
@@ -16,34 +17,36 @@ namespace XmlDocFormat.Core;
 /// experience of writing C# scripts that interact with PowerShell.
 /// </remarks>
 [GaryonUtility]
-public sealed class CliCommand(string command, string? workingDirectory = null)
+public sealed class CliCommand(string command, DirectoryPath? workingDirectory = null)
 {
     private readonly string _command = command;
-    private readonly string? _workingDirectory = workingDirectory;
+    private readonly DirectoryPath? _workingDirectory = workingDirectory;
 
-    public CliCommand(string command, DirectoryInfo? workingDirectory)
-        : this(command, workingDirectory?.FullName) { }
-
-    public ProcessStartInfo ConstructProcessStartInfo()
+    public ProcessStartInfo ConstructProcessStartInfo(
+        ProcessStartInfo? existingInstance = null)
     {
         _command.AsSpan().SplitOnce(' ', out var left, out var right);
         var fileName = left.ToString();
         var arguments = right.ToString();
 
-        return new()
-        {
-            FileName = fileName,
-            Arguments = arguments,
-            CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            WorkingDirectory = _workingDirectory,
-        };
+        existingInstance ??= NewDefaultProcessStartInfo();
+        existingInstance.FileName = fileName;
+        existingInstance.Arguments = arguments;
+        existingInstance.WorkingDirectory = _workingDirectory?.Path;
+        return existingInstance;
     }
 
-    public async Task<BaseRunResult> Run(CancellationToken cancellationToken)
+    public async Task<BaseRunResult> Run(
+        CancellationToken cancellationToken)
     {
-        var processStartInfo = ConstructProcessStartInfo();
+        return await Run(null, cancellationToken);
+    }
+
+    public async Task<BaseRunResult> Run(
+        ProcessStartInfo? existingStartInfo,
+        CancellationToken cancellationToken)
+    {
+        var processStartInfo = ConstructProcessStartInfo(existingStartInfo);
         var process = Process.Start(processStartInfo);
         if (process is null)
         {
@@ -57,25 +60,44 @@ public sealed class CliCommand(string command, string? workingDirectory = null)
 
     public static async Task<BaseRunResult> Run(
         string command,
-        DirectoryInfo? workingDirectory,
+        DirectoryPath? workingDirectory,
         CancellationToken cancellationToken)
     {
-        return await Run(command, workingDirectory?.FullName, cancellationToken);
+        return await Run(
+            command,
+            workingDirectory,
+            existingStartInfo: null,
+            cancellationToken);
     }
 
     public static async Task<BaseRunResult> Run(
         string command,
-        string? workingDirectory,
+        DirectoryPath? workingDirectory,
+        ProcessStartInfo? existingStartInfo,
         CancellationToken cancellationToken)
     {
         var cli = new CliCommand(command, workingDirectory);
-        return await cli.Run(cancellationToken);
+        return await cli.Run(existingStartInfo, cancellationToken);
+    }
+
+    private static ProcessStartInfo NewDefaultProcessStartInfo()
+    {
+        return new ProcessStartInfo()
+        {
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
     }
 
     public abstract record BaseRunResult
     {
         public bool IsNoProcess => this is NoProcessRunResult;
+
+        [MemberNotNullWhen(false, nameof(ProcessResult))]
         public bool IsProcess => this is ProcessRunResult;
+
+        [MemberNotNullWhen(false, nameof(ProcessResult))]
         public bool IsProcessSuccess => this is ProcessRunResult { IsSuccess: true };
 
         public ProcessRunResult? ProcessResult => this as ProcessRunResult;

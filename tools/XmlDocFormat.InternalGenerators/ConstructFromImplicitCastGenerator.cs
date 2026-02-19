@@ -52,15 +52,15 @@ public sealed class ConstructFromImplicitCastGenerator : IIncrementalGenerator
         INamedTypeSymbol targetType,
         CancellationToken cancellationToken)
     {
-        var allConstructors = targetType.InstanceConstructors
-            .Where(static s => s.Parameters.Length is 1)
+        var eligibleConstructors = targetType.InstanceConstructors
+            .Where(IsTargetEligibleConstructor)
             .ToImmutableArray();
         if (HasFactoryAttribute(targetType))
         {
-            return new(targetType, allConstructors);
+            return new(targetType, eligibleConstructors);
         }
 
-        var filteredConstructors = allConstructors
+        var filteredConstructors = eligibleConstructors
             .Where(HasFactoryAttribute)
             .ToImmutableArray();
 
@@ -75,6 +75,22 @@ public sealed class ConstructFromImplicitCastGenerator : IIncrementalGenerator
         {
             return s.AttributeClass?.ToDisplayString() == ConstructFromImplicitCastAttributeTypeName;
         }
+
+        bool IsTargetEligibleConstructor(
+            IMethodSymbol method)
+        {
+            return IsEligibleConstructor(targetType, method);
+        }
+    }
+
+    private static bool IsEligibleConstructor(
+        INamedTypeSymbol targetType,
+        IMethodSymbol method)
+    {
+        return method.Parameters is [var single]
+            && single.Type.TypeKind is not TypeKind.Interface
+            && !single.Type.Equals(targetType, SymbolEqualityComparer.Default)
+            ;
     }
 
     private INamedTypeSymbol? FindAffectedType(

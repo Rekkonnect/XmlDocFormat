@@ -3,6 +3,8 @@ using XmlDocFormat.InternalGenerators.Tests.Testing;
 
 namespace XmlDocFormat.InternalGenerators.Tests;
 
+// TODO: Test individual constructors
+
 public sealed class FactoryConstructorGeneratorTests
     : BaseGeneratorTestContainer<FactoryConstructorGenerator>
 {

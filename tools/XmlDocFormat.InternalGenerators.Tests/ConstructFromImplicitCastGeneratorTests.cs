@@ -3,6 +3,9 @@ using XmlDocFormat.InternalGenerators.Tests.Testing;
 
 namespace XmlDocFormat.InternalGenerators.Tests;
 
+// TODO: Test with different kinds of ineligible constructors
+// TODO: Test individual constructors
+
 public sealed class ConstructFromImplicitCastGeneratorTests
     : BaseGeneratorTestContainer<ConstructFromImplicitCastGenerator>
 {

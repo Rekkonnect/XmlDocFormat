@@ -20,5 +20,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
 
+    - name: Build Solution
+      run: ./tools/scripts/build-init.ps1
+
     - name: Run All Tests
       run: dotnet test --solution ./
