@@ -24,10 +24,10 @@ jobs:
       run: dotnet pack ./tools/XmlDocFormat.InternalGenerators/XmlDocFormat.InternalGenerators.csproj --configuration Release
 
     - name: Restore Solution
-      run: dotnet restore ./XmlDocFormat.slnx --verbosity detailed
+      run: dotnet restore ./XmlDocFormat.slnx
 
     - name: Build Solution
-      run: dotnet build --force --configuration Release
+      run: dotnet build --no-incremental --verbosity detailed --configuration Release
 
     - name: Run All Tests
       run: dotnet test --solution ./ --no-build --configuration Release
