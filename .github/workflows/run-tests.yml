@@ -27,7 +27,7 @@ jobs:
       run: dotnet nuget locals all --clear
 
     - name: Restore Solution
-      run: dotnet restore XmlDocFormat.sln --verbosity detailed
+      run: dotnet restore ./XmlDocFormat.slnx --verbosity detailed
 
     - name: Run All Tests
       run: dotnet test --solution ./
