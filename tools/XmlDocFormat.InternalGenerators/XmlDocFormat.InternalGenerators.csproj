@@ -12,7 +12,6 @@
   <PropertyGroup>
     <PackageId>$(InternalGeneratorsPackageId)</PackageId>
 
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
     <Version>$(InternalGeneratorsVersion)</Version>
 

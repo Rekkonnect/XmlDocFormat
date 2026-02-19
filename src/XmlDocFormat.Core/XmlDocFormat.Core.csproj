@@ -12,14 +12,13 @@
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="5.0.0" />
     <PackageReference Include="Vogen" Version="8.0.4" />
     <PackageReference Include="System.IO.Abstractions" Version="22.1.0" />
-    <PackageReference
-      Include="XmlDocFormat.InternalGenerators"
-      Version="$(InternalGeneratorsVersion)"
-      OutputItemType="Analyzer"
-      ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference
+      Include="..\..\tools\XmlDocFormat.InternalGenerators\XmlDocFormat.InternalGenerators.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\..\tools\XmlDocFormat.InternalGenerators.Core\XmlDocFormat.InternalGenerators.Core.csproj" />
   </ItemGroup>
 
