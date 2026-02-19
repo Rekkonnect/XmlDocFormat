@@ -5,8 +5,8 @@
 
 Echo $PSScriptRoot
 
-echo "Building the XmlDocFormat.InternalGenerators and packing"
-dotnet build $PSScriptRoot/../../tools/XmlDocFormat.InternalGenerators/XmlDocFormat.InternalGenerators.csproj --configuration Release
+echo "Packing XmlDocFormat.InternalGenerators"
+dotnet pack $PSScriptRoot/../../tools/XmlDocFormat.InternalGenerators/XmlDocFormat.InternalGenerators.csproj --configuration Release
 
 echo "Building the entire solution"
 dotnet build $PSScriptRoot/../../

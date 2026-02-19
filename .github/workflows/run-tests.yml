@@ -20,17 +20,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
 
-    - name: Build XmlDocFormat.InternalGenerators
-      run: dotnet build ./tools/XmlDocFormat.InternalGenerators/XmlDocFormat.InternalGenerators.csproj --configuration Release
-
-    - name: Clear NuGet Cache
-      run: dotnet nuget locals all --clear
-
-    - name: Restore Solution
-      run: dotnet restore ./XmlDocFormat.slnx --verbosity detailed
-    
-    - name: Build Solution
-      run: dotnet build --force
+    - name: Run build-init
+      shell: pwsh
+      run: ./tools/scripts/build-init.ps1
 
     - name: Run All Tests
       run: dotnet test --solution ./ --no-build
