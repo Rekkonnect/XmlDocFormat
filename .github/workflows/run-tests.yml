@@ -20,9 +20,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
 
-    - name: Build Solution
-      shell: pwsh
-      run: ./tools/scripts/build-init.ps1
+    - name: Build XmlDocFormat.InternalGenerators
+      run: dotnet build ./tools/XmlDocFormat.InternalGenerators/XmlDocFormat.InternalGenerators.csproj --configuration Release
+
+    - name: Clear NuGet Cache
+      run: dotnet nuget locals all --clear
+
+    - name: Restore Solution
+      run: dotnet restore XmlDocFormat.sln --verbosity detailed
 
     - name: Run All Tests
       run: dotnet test --solution ./
