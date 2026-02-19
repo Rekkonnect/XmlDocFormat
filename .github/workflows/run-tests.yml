@@ -30,7 +30,7 @@ jobs:
       run: dotnet restore ./XmlDocFormat.slnx --verbosity detailed
     
     - name: Build Solution
-      run: dotnet build --force-rerun-analyzers
+      run: dotnet build --force
 
     - name: Run All Tests
       run: dotnet test --solution ./ --no-build
