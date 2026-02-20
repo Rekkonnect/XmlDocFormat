@@ -1,11 +1,11 @@
-<Project>
+﻿<Project>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <None
           Include="../../tools/XmlDocFormat.InternalGenerators/bin/$(Configuration)/$(TargetFramework)/*.dll"
           Visible="false"
           Pack="true"
           PackagePath="analyzers/dotnet/cs" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 </Project>

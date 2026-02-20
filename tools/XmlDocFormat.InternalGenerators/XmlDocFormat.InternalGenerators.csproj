@@ -27,6 +27,14 @@
     <IsRoslynComponent>true</IsRoslynComponent>
   </PropertyGroup>
 
+  <Import Project="InferTransitiveDependencies.props" />
+
+  <ItemGroup>
+    <None Include="InferTransitiveDependencies.props" Pack="true" PackagePath="build" />
+    <None Include="InferTransitiveDependencies.props" Pack="true" PackagePath="buildMultiTargeting" />
+    <None Include="InferTransitiveDependencies.props" Pack="true" PackagePath="buildTransitive" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectCapability Include="RoslynComponent" />
   </ItemGroup>
@@ -50,18 +58,29 @@
     <ProjectReference Include="..\XmlDocFormat.InternalGenerators.Core\XmlDocFormat.InternalGenerators.Core.csproj" />
   </ItemGroup>
 
+  <!--
+    Findings from https://turnerj.com/blog/csharp-source-generator-pain-points-february-2022-update
+  --><!--
+
   <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
   </PropertyGroup>
 
-  <Target Name="GetDependencyTargetPaths">
+  <Target Name="GetDependencyTargetPaths" AfterTargets="ResolvePackageDependenciesForBuild" DependsOnTargets="ResolveReferences">
     <ItemGroup>
-      <TargetPathWithTargetPlatformMoniker Include="$(PKGDentextist)\lib\netstandard2.0\Dentextist.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PKGGaryon)\lib\netstandard2.0\Garyon.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PKGRoseLynn)\lib\netstandard2.0\RoseLynn.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PKGRoseLynn_VS2019)\lib\netstandard2.0\RoseLynn.VS2019.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PKGRoseLynn_Generators)\lib\netstandard2.0\RoseLynn.Generators.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="@(ResolvedCompileFileDefinitions)" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
+
+  --><!--
+    https://github.com/dotnet/roslyn/issues/52017#issuecomment-1046216200
+    This automatically adds explicit and transient dependencies so that they are available at the time the generator is executed. 
+  --><!--
+  <Target Name="AddGenerationTimeReferences" AfterTargets="ResolvePackageDependenciesForBuild">
+    <ItemGroup>
+      <None Include="@(ResolvedCompileFileDefinitions)" Pack="true" PackagePath="analyzers/dotnet/cs" />
+    </ItemGroup>
+  </Target>-->
 
 </Project>

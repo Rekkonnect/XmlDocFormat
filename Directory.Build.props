@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <InternalGeneratorsPackageId>XmlDocFormat.InternalGenerators</InternalGeneratorsPackageId>
-    <InternalGeneratorsVersion>0.3.1</InternalGeneratorsVersion>
+    <InternalGeneratorsVersion>0.3.2</InternalGeneratorsVersion>
 
     <InternalGeneratorsLocation>$(SolutionDir)artifacts/generators/</InternalGeneratorsLocation>
     <InternalGeneratorsBuiltPackageLocation>
