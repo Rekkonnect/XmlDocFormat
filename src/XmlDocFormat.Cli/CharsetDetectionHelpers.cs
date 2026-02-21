@@ -4,6 +4,7 @@ using System.Text;
 using UtfUnknown;
 using UtfUnknown.Core.Probers;
 using UtfUnknown.Core.Probers.MultiByte;
+using XmlDocFormat.Core;
 
 namespace XmlDocFormat.Cli;
 
@@ -69,71 +70,70 @@ public static class CharsetDetectionHelpers
 
     private static float GetEncodingConfidence(byte[] bytes, Encoding encoding)
     {
-        try
-        {
-            if (bytes is [])
-            {
-                return 0;
-            }
+        return DelegateHelpers.Try(
+            () => GetEncodingConfidenceCore(bytes, encoding));
+    }
 
-            var text = encoding.GetString(bytes);
-            if (text is null or "")
-            {
-                return 0;
-            }
-
-            int nulls = 0;
-            int controls = 0;
-            int legibles = 0;
-            int commonCodeCharacters = 0;
-            foreach (var ch in text)
-            {
-                var category = char.GetUnicodeCategory(ch);
-                ref int counter = ref legibles;
-
-                if (ch is '\0')
-                {
-                    counter = ref nulls;
-                }
-                else if (category
-                    is UnicodeCategory.Control
-                    or UnicodeCategory.Format
-                    or UnicodeCategory.Surrogate
-                    or UnicodeCategory.PrivateUse
-                    or UnicodeCategory.OtherSymbol)
-                {
-                    counter = ref controls;
-                }
-                else if (category
-                    is UnicodeCategory.LowercaseLetter
-                    or UnicodeCategory.UppercaseLetter
-                    or UnicodeCategory.OpenPunctuation
-                    or UnicodeCategory.ClosePunctuation
-                    or UnicodeCategory.OtherPunctuation)
-                {
-                    counter = ref commonCodeCharacters;
-                }
-
-                counter++;
-            }
-
-            const double nullWeight = 5;
-            const double controlWeight = 2.5;
-            const double legibleWeight = 1;
-            const double commonCodeCharacterWeight = 3;
-
-            var positiveWeight = legibles * legibleWeight
-                + commonCodeCharacters * commonCodeCharacterWeight;
-            var negativeWeight = nulls * nullWeight
-                + controls * controlWeight;
-            var totalWeight = positiveWeight + negativeWeight;
-
-            return (float)(positiveWeight / totalWeight);
-        }
-        catch
+    private static float GetEncodingConfidenceCore(byte[] bytes, Encoding encoding)
+    {
+        if (bytes is [])
         {
             return 0;
         }
+
+        var text = encoding.GetString(bytes);
+        if (text is null or "")
+        {
+            return 0;
+        }
+
+        int nulls = 0;
+        int controls = 0;
+        int legibles = 0;
+        int commonCodeCharacters = 0;
+        foreach (var ch in text)
+        {
+            var category = char.GetUnicodeCategory(ch);
+            ref int counter = ref legibles;
+
+            if (ch is '\0')
+            {
+                counter = ref nulls;
+            }
+            else if (category
+                is UnicodeCategory.Control
+                or UnicodeCategory.Format
+                or UnicodeCategory.Surrogate
+                or UnicodeCategory.PrivateUse
+                or UnicodeCategory.OtherSymbol)
+            {
+                counter = ref controls;
+            }
+            else if (category
+                is UnicodeCategory.LowercaseLetter
+                or UnicodeCategory.UppercaseLetter
+                or UnicodeCategory.OpenPunctuation
+                or UnicodeCategory.ClosePunctuation
+                or UnicodeCategory.OtherPunctuation)
+            {
+                counter = ref commonCodeCharacters;
+            }
+
+            counter++;
+        }
+
+        const double nullWeight = 5;
+        const double controlWeight = 2.5;
+        const double legibleWeight = 1;
+        const double commonCodeCharacterWeight = 3;
+
+        var positiveWeight = legibles * legibleWeight
+            + commonCodeCharacters * commonCodeCharacterWeight;
+        var negativeWeight = nulls * nullWeight
+            + controls * controlWeight;
+        var totalWeight = positiveWeight + negativeWeight;
+
+        return (float)(positiveWeight / totalWeight);
     }
 
     private static class ConvincingResults

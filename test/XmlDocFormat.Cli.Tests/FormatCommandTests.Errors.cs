@@ -7,8 +7,8 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task InexistentFile()
     {
-        const string goodFilePath = @"Q:\cs\file1.cs";
-        const string badFilePath = @"Q:\cs\file2.cs";
+        const string goodFilePath = @"Q:/cs/file1.cs";
+        const string badFilePath = @"Q:/cs/file2.cs";
 
 #pragma warning disable CS0162 // Unreachable code detected
         if (goodFilePath == badFilePath)
@@ -33,7 +33,7 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task InexistentDirectory()
     {
-        const string filePath = @"Q:\cs\file1.cs";
+        const string filePath = @"Q:/cs/file1.cs";
 
         var fileSystem = new MockFileSystem(
             new Dictionary<string, MockFileData>
@@ -51,7 +51,7 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task InexistentDirectoryRecursive()
     {
-        const string filePath = @"Q:\cs\file1.cs";
+        const string filePath = @"Q:/cs/file1.cs";
 
         var fileSystem = new MockFileSystem(
             new Dictionary<string, MockFileData>
@@ -69,7 +69,7 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task InexistentFileFromDirectoryPath()
     {
-        const string filePath = @"Q:\cs\file1.cs";
+        const string filePath = @"Q:/cs/file1.cs";
 
         var fileSystem = new MockFileSystem(
             new Dictionary<string, MockFileData>
@@ -87,7 +87,7 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task InvalidOutputPathNotWritable()
     {
-        const string filePath = @"Q:\cs\file1.cs";
+        const string filePath = @"Q:/cs/file1.cs";
 
         var fileSystem = new MockFileSystem(
             new Dictionary<string, MockFileData>
@@ -99,7 +99,7 @@ public partial class FormatCommandTests : BaseCliTests
         var result = await context.RunAsync(
         [
             "format", filePath,
-            "-o", "-:/Invalid/Path to: nowhere.",
+            "-o", "-:/Invalid/Path to: \0nowhere.\0",
             "-l", "40",
             "-p", "1",
         ]);

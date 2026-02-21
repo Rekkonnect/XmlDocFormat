@@ -5,8 +5,8 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.IO.Abstractions;
 using System.Text;
-using UtfUnknown;
 using XmlDocFormat.Core;
+using XmlDocFormat.Core.FileExtensions;
 
 namespace XmlDocFormat.Cli;
 
@@ -22,7 +22,7 @@ public class FormatCommand(
     {
         try
         {
-            return await ExecuteCore(context, settings, cancellationToken);
+            return await ExecuteCore(context, settings, cancellationToken).NoContext;
         }
         catch
         {
@@ -35,14 +35,14 @@ public class FormatCommand(
         Settings settings,
         CancellationToken cancellationToken)
     {
-        var validationResult = await ValidateAsync(context, settings, cancellationToken);
+        var validationResult = await ValidateAsync(context, settings, cancellationToken).NoContext;
         if (validationResult is not ExecutionResult.Success)
         {
             return validationResult;
         }
 
         var options = settings.GetFormatterOptions();
-        var formatter = new XmlDocFormatter(options);
+        var formatter = new HybridXmlDocFormatter(options);
 
         var mappings = settings.GetTargetFileMappings(fileSystem);
         if (mappings is [])
@@ -52,16 +52,45 @@ public class FormatCommand(
         }
 
         var parallelism = settings.GetSelectedParallelism();
+        AnsiConsole.WriteLine($"Found {mappings.Length} files to format using {parallelism} threads.");
+
         var parallelOptions = new ParallelOptions
         {
             MaxDegreeOfParallelism = parallelism,
             CancellationToken = cancellationToken,
         };
-        await Parallel.ForEachAsync(mappings, parallelOptions, FormatFile);
+
+        int completed = 0;
+        var start = DateTime.UtcNow;
+
+        var operationCompletionCancellationSource = new CancellationTokenSource();
+        var reportingCancellationTokenSource = CancellationTokenSource
+            .CreateLinkedTokenSource(cancellationToken, operationCompletionCancellationSource.Token);
+        var reportingCancellationToken = reportingCancellationTokenSource.Token;
+        var reportingTask = Task.Run(
+            () => Report(reportingCancellationToken),
+            reportingCancellationToken);
+
+        await Parallel.ForEachAsync(mappings, parallelOptions, FormatFile).NoContext;
+        await operationCompletionCancellationSource.CancelAsync().NoContext;
 
         if (settings.UsesDirectoryPath)
         {
-            AnsiConsole.WriteLine($"Formatted {mappings.Length} *.cs files in '{settings.FilePath}'.");
+            var extensionGroups = mappings
+                .GroupBy(m => fileSystem.Path.GetExtension(m.Source), StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(s => s.Key, s => s.Count(), StringComparer.OrdinalIgnoreCase);
+
+            var csFiles = extensionGroups.GetValueOrDefault(SourceFileExtensionFacts.CSharp);
+            var vbFiles = extensionGroups.GetValueOrDefault(SourceFileExtensionFacts.VisualBasic);
+
+            var fileItemCounts = new ItemCountCollection([
+                    new ItemCount(csFiles, SourceFileExtensionFacts.AnyCSharpFile),
+                    new ItemCount(vbFiles, SourceFileExtensionFacts.AnyVisualBasicFile),
+                ]);
+
+            var fileCount = fileItemCounts.ToDisplayString();
+
+            AnsiConsole.WriteLine($"Formatted {fileCount} files in '{settings.FilePath}'.");
         }
         else
         {
@@ -72,16 +101,35 @@ public class FormatCommand(
 
         async ValueTask FormatFile(FileMapping mapping, CancellationToken cancellationToken)
         {
-            var bytes = await fileSystem.File.ReadAllBytesAsync(mapping.Source, cancellationToken);
+            var bytes = await fileSystem.File
+                .ReadAllBytesAsync(mapping.Source, cancellationToken)
+                .NoContext;
             var detectionResult = CharsetDetectionHelpers.DetectFromBytesEx(bytes);
             var encoding = detectionResult.Detected.Encoding ?? Encoding.Utf8WithoutBom;
             var text = encoding.GetString(bytes);
-            var formatted = formatter.Format(text);
+            var formatted = formatter.FormatFile(mapping.Source, text);
             var formattedBytes = encoding.GetBytes(formatted);
             var targetFile = fileSystem.FileInfo.New(mapping.Target);
             targetFile.Directory!.CreateSafe();
-            await fileSystem.File.WriteAllBytesAsync(
-                mapping.Target, formattedBytes, cancellationToken);
+            await fileSystem.File
+                .WriteAllBytesAsync(
+                    mapping.Target, formattedBytes, cancellationToken)
+                .NoContext;
+            Interlocked.Increment(ref completed);
+        }
+
+        async Task Report(CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                var interval = Random.Shared.Next(300, 370);
+                await Task.Delay(interval, cancellationToken).NoContext;
+
+                var now = DateTime.UtcNow;
+                var elapsed = start - now;
+
+                AnsiConsole.WriteLine($"Completed {completed} / {mappings.Length} files in {elapsed.TotalMilliseconds}ms.");
+            }
         }
     }
 
@@ -204,7 +252,7 @@ public class FormatCommand(
         {
             if (!UsesDirectoryPath)
             {
-                if (fileSystem.Path.GetExtension(FilePath) is not ".cs")
+                if (!fileSystem.Path.GetExtension(FilePath).IsNetLanguageFileExtension())
                 {
                     return [];
                 }
@@ -251,14 +299,20 @@ public class FormatCommand(
 
         private ImmutableArray<string> GetDirectoryFiles(IFileSystem fileSystem)
         {
-            return fileSystem.Directory.GetFiles(FilePath).ToImmutableArray();
+            return GetFilteredCodeFiles(fileSystem, SearchOption.TopDirectoryOnly);
         }
 
         private ImmutableArray<string> GetDirectoryRecursiveFiles(IFileSystem fileSystem)
         {
+            return GetFilteredCodeFiles(fileSystem, SearchOption.AllDirectories);
+        }
+
+        private ImmutableArray<string> GetFilteredCodeFiles(
+            IFileSystem fileSystem,
+            SearchOption searchOption)
+        {
             return fileSystem.Directory
-                .GetFiles(FilePath, "*.cs", SearchOption.AllDirectories)
-                .ToImmutableArray();
+                .GetFiles(FilePath, SourceFileExtensionFacts.AnyFileExtensions, searchOption);
         }
     }
 

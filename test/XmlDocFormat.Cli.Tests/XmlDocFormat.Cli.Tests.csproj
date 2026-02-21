@@ -8,12 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="22.1.0" />
-    <PackageReference Include="TUnit" Version="1.12.3" />
+    <PackageReference Include="TUnit" Version="1.15.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\XmlDocFormat.Cli\XmlDocFormat.Cli.csproj" />
-    <ProjectReference Include="..\XmlDocFormat.Core.Tests\XmlDocFormat.Core.Tests.csproj" />
+    <ProjectReference Include="..\XmlDocFormat.Tests.Shared\XmlDocFormat.Tests.Shared.csproj" />
   </ItemGroup>
 
 </Project>

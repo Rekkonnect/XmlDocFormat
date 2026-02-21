@@ -1,0 +1,27 @@
+name: run-tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  run:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Build Solution
+      run: dotnet build --no-incremental --configuration Release
+
+    - name: Run All Tests
+      run: dotnet test --solution ./ --no-build --configuration Release

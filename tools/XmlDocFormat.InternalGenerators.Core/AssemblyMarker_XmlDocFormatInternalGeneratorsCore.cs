@@ -1,0 +1,3 @@
+﻿namespace XmlDocFormat.InternalGenerators.Core;
+
+public sealed class AssemblyMarker_XmlDocFormatInternalGeneratorsCore;

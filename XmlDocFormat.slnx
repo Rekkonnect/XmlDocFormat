@@ -1,13 +1,24 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
+    <File Path="AnalyzerConfig.globalconfig" />
+    <File Path="global.json" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/XmlDocFormat.Core/XmlDocFormat.Core.csproj" />
     <Project Path="src/XmlDocFormat.Cli/XmlDocFormat.Cli.csproj" />
+    <Project Path="src/XmlDocFormat.Core/XmlDocFormat.Core.csproj" />
   </Folder>
   <Folder Name="/test/">
-    <Project Path="test/XmlDocFormat.Core.Tests/XmlDocFormat.Core.Tests.csproj" />
     <Project Path="test/XmlDocFormat.Cli.Tests/XmlDocFormat.Cli.Tests.csproj" Id="cb2761ff-2fc5-40e6-b927-234debf332af" />
+    <Project Path="test/XmlDocFormat.Core.Tests/XmlDocFormat.Core.Tests.csproj" />
+    <Project Path="test/XmlDocFormat.Tests.Shared/XmlDocFormat.Tests.Shared.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/XmlDocFormat.InternalGenerators.Core/XmlDocFormat.InternalGenerators.Core.csproj" Id="e6ec0d9e-fb74-4307-ab1d-da5af722c070" />
+    <Project Path="tools/XmlDocFormat.InternalGenerators.Tests/XmlDocFormat.InternalGenerators.Tests.csproj" Id="1ad30389-4df4-4121-b194-fa24a1d55d6f" />
+    <Project Path="tools/XmlDocFormat.InternalGenerators/XmlDocFormat.InternalGenerators.csproj" Id="75d797fa-52a9-49b3-bc5b-cb8dfdf6578c" />
+  </Folder>
+  <Folder Name="/tools/scripts/">
+    <File Path="tools/scripts/run-coverage.cs" />
   </Folder>
 </Solution>
