@@ -1,17 +1,6 @@
 ﻿<Project>
 
   <PropertyGroup>
-    <InternalGeneratorsPackageId>XmlDocFormat.InternalGenerators</InternalGeneratorsPackageId>
-    <InternalGeneratorsVersion>0.3.2</InternalGeneratorsVersion>
-
-    <InternalGeneratorsLocation>$(SolutionDir)artifacts/generators/</InternalGeneratorsLocation>
-    <InternalGeneratorsBuiltPackageLocation>
-      $(InternalGeneratorsLocation)$(InternalGeneratorsPackageId).$(InternalGeneratorsVersion).nupkg
-    </InternalGeneratorsBuiltPackageLocation>
-
-    <InternalGeneratorsProjectLocation>
-      $(SolutionDir)tools/XmlDocFormat.InternalGenerators/XmlDocFormat.InternalGenerators.csproj
-    </InternalGeneratorsProjectLocation>
   </PropertyGroup>
 
 </Project>

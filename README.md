@@ -96,41 +96,12 @@ a local HTML page for more detailed information about the coverage.
 
 ### Build
 
-On a system that is building this project for the first time, run this script to
-kick off the build:
+Use the following command to build the project:
 ```sh
-./tools/scripts/build-init.ps1
+dotnet build
 ```
 
-The reason for the above script is because there is an internal generators
-package that must be built and stored in local storage before other projects can
-be built, and MSBuild makes this task near impossible without tons of hacks.
-
-Once the above script has been run once and successfully, it's expected that
-simply building the solution will work at all times, as the generator will be
-available for consumption.
-
-When the generators project changes, for the changes to come into effect it is
-recommended to increase the version number for a new package version to be
-definitely recognized by the build system. This version number is defined in the
-`Directory.Build.props` file. After the version change and building the
-solution, the new generator version may be picked on the subsequent build, thus
-causing build failures on the first build. It's always recommended to trust unit
-tests' results when working with generators to ensure that the logic is correct
-before the IDEs pick up the changes in the real workflow.
-
-There is a script to clean the entire solution and packages by ensuring that
-neither the package artifacts folder, nor the global NuGet package cache have
-any packages of the internal generators. This script is useful for
-troubleshooting build issues on systems that have never built this project
-before:
-```sh
-dotnet run ./tools/scripts/clean-solution-and-packages.cs
-```
-
-After this script is run, it's expected that the `build-init` script shown above
-must be run again to have a successful build, since the generators package will
-not be available after the clean.
+There should be generated sources
 
 ### Coverage
 

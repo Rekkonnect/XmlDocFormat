@@ -10,40 +10,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>$(InternalGeneratorsPackageId)</PackageId>
-
-    <IsPackable>true</IsPackable>
-    <Version>$(InternalGeneratorsVersion)</Version>
-
-    <!-- Special properties for analyzer packages. -->
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <NoWarn>$(NoWarn);NU5128;NU5127</NoWarn>
-
-    <DevelopmentDependency>true</DevelopmentDependency>
-    <PackageOutputPath>../../artifacts/generators/</PackageOutputPath>
-    <RepositoryType>git</RepositoryType>
-
     <IsRoslynComponent>true</IsRoslynComponent>
   </PropertyGroup>
-
-  <Import Project="InferTransitiveDependencies.props" />
-
-  <ItemGroup>
-    <None Include="InferTransitiveDependencies.props" Pack="true" PackagePath="build" />
-    <None Include="InferTransitiveDependencies.props" Pack="true" PackagePath="buildMultiTargeting" />
-    <None Include="InferTransitiveDependencies.props" Pack="true" PackagePath="buildTransitive" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectCapability Include="RoslynComponent" />
   </ItemGroup>
 
-  <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec">
-    <PropertyGroup>
-      <NuspecProperties>$(NuspecProperties);Version=$(Version);BaseOutputPath=$(OutputPath);PackageReleaseNotes=$(PackageReleaseNotes);</NuspecProperties>
-    </PropertyGroup>
-  </Target>
+  <Import Project="InferTransitiveDependencies.props" />
 
   <ItemGroup>
     <PackageReference Include="Dentextist" Version="1.0.1" GeneratePathProperty="true" />
@@ -57,30 +31,5 @@
   <ItemGroup>
     <ProjectReference Include="..\XmlDocFormat.InternalGenerators.Core\XmlDocFormat.InternalGenerators.Core.csproj" />
   </ItemGroup>
-
-  <!--
-    Findings from https://turnerj.com/blog/csharp-source-generator-pain-points-february-2022-update
-  --><!--
-
-  <PropertyGroup>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
-  </PropertyGroup>
-
-  <Target Name="GetDependencyTargetPaths" AfterTargets="ResolvePackageDependenciesForBuild" DependsOnTargets="ResolveReferences">
-    <ItemGroup>
-      <TargetPathWithTargetPlatformMoniker Include="@(ResolvedCompileFileDefinitions)" IncludeRuntimeDependency="false" />
-    </ItemGroup>
-  </Target>
-
-  --><!--
-    https://github.com/dotnet/roslyn/issues/52017#issuecomment-1046216200
-    This automatically adds explicit and transient dependencies so that they are available at the time the generator is executed. 
-  --><!--
-  <Target Name="AddGenerationTimeReferences" AfterTargets="ResolvePackageDependenciesForBuild">
-    <ItemGroup>
-      <None Include="@(ResolvedCompileFileDefinitions)" Pack="true" PackagePath="analyzers/dotnet/cs" />
-    </ItemGroup>
-  </Target>-->
 
 </Project>

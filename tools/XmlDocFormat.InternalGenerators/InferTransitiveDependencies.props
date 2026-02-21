@@ -1,6 +1,11 @@
 ﻿<!--
   Source taken from:
   https://github.com/HavenDV/H.Generators.Extensions/blob/main/src/libs/H.Generators.Extensions/build/H.Generators.Extensions.props
+
+  Found the source from this comment:
+  https://github.com/dotnet/sdk/issues/17775#issuecomment-1162728305
+
+  Please for the love of fucking whomever, fix this shit
 -->
 
 <Project>
