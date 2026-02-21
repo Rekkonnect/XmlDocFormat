@@ -17,22 +17,11 @@ jobs:
       fail-fast: false
 
     steps:
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v5.1.0
-      with:
-        dotnet-version: 10.0.x
-
     - name: Checkout
       uses: actions/checkout@v6
 
-    - name: Pack XmlDocFormat.InternalGenerators
-      run: dotnet pack ./tools/XmlDocFormat.InternalGenerators/XmlDocFormat.InternalGenerators.csproj --configuration Release
-
-    - name: Restore Solution
-      run: dotnet restore ./XmlDocFormat.slnx
-
     - name: Build Solution
-      run: dotnet build --no-incremental --verbosity detailed --configuration Release
+      run: dotnet build --no-incremental --configuration Release
 
     - name: Run All Tests
       run: dotnet test --solution ./ --no-build --configuration Release
