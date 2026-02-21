@@ -1,6 +1,8 @@
-﻿using Microsoft.CodeAnalysis.Text;
+﻿using Garyon.Objects.Strings;
+using Microsoft.CodeAnalysis.Text;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using XmlDocFormat.Core;
 using XmlDocFormat.Tests.Shared;
 
 namespace XmlDocFormat.InternalGenerators.Tests.Testing;
@@ -11,6 +13,7 @@ public static class GeneralGeneratorTestHelpers
         [StringSyntax(PredefinedEmbeddedLanguageNames.CSharpTest)]
         string source)
     {
-        return SourceText.From(source, Encoding.UTF8);
+        var normalizedSource = source.NormalizeNewLines(WhitespaceFacts.CrLf);
+        return SourceText.From(normalizedSource, Encoding.UTF8);
     }
 }

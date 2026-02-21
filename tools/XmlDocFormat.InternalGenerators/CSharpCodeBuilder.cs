@@ -191,11 +191,10 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
             if (@namespace.IsGlobalNamespace)
                 return;
 
-            _builder.AppendLine(
-                $"""
-                namespace {@namespace.ToDisplayString()};
+            _builder.AppendSingleLineContent(
+                $"namespace {@namespace.ToDisplayString()};");
 
-                """);
+            _builder.AppendDoubleLine();
         }
 
         private void WriteType(INamedTypeSymbol type)

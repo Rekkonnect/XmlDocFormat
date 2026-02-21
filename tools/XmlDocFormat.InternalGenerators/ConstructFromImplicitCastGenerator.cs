@@ -7,7 +7,7 @@ using XmlDocFormat.InternalGenerators.Core;
 namespace XmlDocFormat.InternalGenerators;
 
 [Generator]
-public sealed class ConstructFromImplicitCastGenerator : IIncrementalGenerator
+public sealed class  ConstructFromImplicitCastGenerator : IIncrementalGenerator
 {
     private static readonly string ConstructFromImplicitCastAttributeTypeName
         = typeof(ConstructFromImplicitCastAttribute).ToString();

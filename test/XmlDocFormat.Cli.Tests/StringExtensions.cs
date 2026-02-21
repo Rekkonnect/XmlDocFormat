@@ -6,9 +6,14 @@ public static class StringExtensions
 {
     extension(string str)
     {
-        public string WithTrailingNewLine()
+        public string WithTrailingEnvironmentNewLine()
         {
-            return str.EnsureEndsWith("\r\n");
+            return str.WithTrailingNewLine(Environment.NewLine);
+        }
+
+        public string WithTrailingNewLine(string newLine)
+        {
+            return str.EnsureEndsWith(newLine);
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using RoseLynn.Generators;
+﻿using Garyon.Objects.Strings;
+using RoseLynn.Generators;
 using System.Diagnostics.CodeAnalysis;
+using XmlDocFormat.Core;
 using XmlDocFormat.InternalGenerators.Tests.Testing;
 using XmlDocFormat.Tests.Shared;
 
@@ -147,6 +149,7 @@ public sealed class GeneratorOutputWriterTests
         string expected)
     {
         var source = GeneratorOutputWriter.GenerateSourceMappingsCode(mappings);
-        await Assert.That(source).IsEqualTo(expected);
+        var normalizedExpected = source.NormalizeNewLines(WhitespaceFacts.CrLf);
+        await Assert.That(source).IsEqualTo(normalizedExpected);
     }
 }

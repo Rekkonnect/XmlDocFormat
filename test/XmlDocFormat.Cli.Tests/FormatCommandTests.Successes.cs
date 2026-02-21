@@ -1,6 +1,7 @@
 ﻿using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Text;
+using XmlDocFormat.Core;
 using XmlDocFormat.Tests.Shared;
 
 namespace XmlDocFormat.Cli.Tests;
@@ -10,7 +11,7 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task SingleFileFormat()
     {
-        const string filePath = @"Q:\cs\file1.cs";
+        const string filePath = @"Q:/cs/file1.cs";
 
         var asset = GeneralFormatTestCases.BasicSummary;
         var source = asset.Source;
@@ -41,9 +42,9 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task MultipleFilesOuterFormat()
     {
-        const string file1Path = @"Q:\cs\file1.cs";
-        const string file2Path = @"Q:\cs\file2.cs";
-        const string file3Path = @"Q:\cs\nested\file3.cs";
+        const string file1Path = @"Q:/cs/file1.cs";
+        const string file2Path = @"Q:/cs/file2.cs";
+        const string file3Path = @"Q:/cs/nested/file3.cs";
 
         var case1 = GeneralFormatTestCases.BasicSummary;
         var case2 = GeneralFormatTestCases.BreakElementPreservation;
@@ -84,9 +85,9 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task MultipleFilesInnerFormat()
     {
-        const string file1Path = @"Q:\cs\file1.cs";
-        const string file2Path = @"Q:\cs\file2.cs";
-        const string file3Path = @"Q:\cs\nested\file3.cs";
+        const string file1Path = @"Q:/cs/file1.cs";
+        const string file2Path = @"Q:/cs/file2.cs";
+        const string file3Path = @"Q:/cs/nested/file3.cs";
 
         var case1 = GeneralFormatTestCases.BasicSummary;
         var case2 = GeneralFormatTestCases.BreakElementPreservation;
@@ -127,9 +128,9 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task MultipleFilesRecursiveOuterFormat()
     {
-        const string file1Path = @"Q:\cs\file1.cs";
-        const string file2Path = @"Q:\cs\file2.cs";
-        const string file3Path = @"Q:\cs\nested\file3.cs";
+        const string file1Path = @"Q:/cs/file1.cs";
+        const string file2Path = @"Q:/cs/file2.cs";
+        const string file3Path = @"Q:/cs/nested/file3.cs";
 
         var case1 = GeneralFormatTestCases.BasicSummary;
         var case2 = GeneralFormatTestCases.BreakElementPreservation;
@@ -170,9 +171,9 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task MultipleFilesRecursiveInnerFormat()
     {
-        const string file1Path = @"Q:\cs\file1.cs";
-        const string file2Path = @"Q:\cs\file2.cs";
-        const string file3Path = @"Q:\cs\nested\file3.cs";
+        const string file1Path = @"Q:/cs/file1.cs";
+        const string file2Path = @"Q:/cs/file2.cs";
+        const string file3Path = @"Q:/cs/nested/file3.cs";
 
         var case1 = GeneralFormatTestCases.BasicSummary;
         var case2 = GeneralFormatTestCases.BreakElementPreservation;
@@ -213,8 +214,8 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task SingleFileFormatToOutputInSameDirectory()
     {
-        const string sourceFilePath = @"Q:\cs\file1.cs";
-        const string targetFilePath = @"Q:\cs\file2.cs";
+        const string sourceFilePath = @"Q:/cs/file1.cs";
+        const string targetFilePath = @"Q:/cs/file2.cs";
 
         var formattingCase = GeneralFormatTestCases.BasicSummary;
 
@@ -243,9 +244,9 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task SingleFileFormatToOutputInDifferentDirectory()
     {
-        const string sourceFilePath = @"Q:\cs\file1.cs";
-        const string targetFilePath = @"Q:\cs\inner\file2.cs";
-        const string otherExistingFilePath = @"Q:\cs\inner\existing.cs";
+        const string sourceFilePath = @"Q:/cs/file1.cs";
+        const string targetFilePath = @"Q:/cs/inner/file2.cs";
+        const string otherExistingFilePath = @"Q:/cs/inner/existing.cs";
 
         var formattingCase = GeneralFormatTestCases.BasicSummary;
 
@@ -275,8 +276,8 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task SingleFileFormatToOutputInNewNestedDirectory()
     {
-        const string sourceFilePath = @"Q:\cs\file1.cs";
-        const string targetFilePath = @"Q:\cs\inner\file2.cs";
+        const string sourceFilePath = @"Q:/cs/file1.cs";
+        const string targetFilePath = @"Q:/cs/inner/file2.cs";
 
         var formattingCase = GeneralFormatTestCases.BasicSummary;
 
@@ -305,8 +306,8 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task SingleFileFormatToOutputInNewIrrelevantDirectory()
     {
-        const string sourceFilePath = @"Q:\cs\file1.cs";
-        const string targetFilePath = @"Q:\cs2\file2.cs";
+        const string sourceFilePath = @"Q:/cs/file1.cs";
+        const string targetFilePath = @"Q:/cs2/file2.cs";
 
         var formattingCase = GeneralFormatTestCases.BasicSummary;
 
@@ -335,13 +336,13 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task MultipleFileFormatToOutputInNewIrrelevantDirectory()
     {
-        const string sourceFile1Path = @"Q:\cs\file1.cs";
-        const string sourceFile2Path = @"Q:\cs\file2.cs";
-        const string sourceFile3Path = @"Q:\cs\nested\file3.cs";
+        const string sourceFile1Path = @"Q:/cs/file1.cs";
+        const string sourceFile2Path = @"Q:/cs/file2.cs";
+        const string sourceFile3Path = @"Q:/cs/nested/file3.cs";
 
-        const string outputFile1Path = @"Q:\cs2\file1.cs";
-        const string outputFile2Path = @"Q:\cs2\file2.cs";
-        const string outputFile3Path = @"Q:\cs2\nested\file3.cs";
+        const string outputFile1Path = @"Q:/cs2/file1.cs";
+        const string outputFile2Path = @"Q:/cs2/file2.cs";
+        const string outputFile3Path = @"Q:/cs2/nested/file3.cs";
 
         var case1 = GeneralFormatTestCases.BasicSummary;
         var case2 = GeneralFormatTestCases.BreakElementPreservation;
@@ -384,7 +385,7 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task SingleNotCsFileFormat()
     {
-        const string filePath = @"Q:\cs\file1.notcs";
+        const string filePath = @"Q:/cs/file1.notcs";
 
         var asset = GeneralFormatTestCases.BasicSummary;
         var source = asset.Source;
@@ -415,9 +416,9 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task MultipleFilesMixedRealAndNotCsFormat()
     {
-        const string file1Path = @"Q:\cs\file1.cs";
-        const string file2Path = @"Q:\cs\file2.notcs";
-        const string file3Path = @"Q:\cs\nested\file3.cs";
+        const string file1Path = @"Q:/cs/file1.cs";
+        const string file2Path = @"Q:/cs/file2.notcs";
+        const string file3Path = @"Q:/cs/nested/file3.cs";
 
         var case1 = GeneralFormatTestCases.BasicSummary;
         var case2 = GeneralFormatTestCases.BreakElementPreservation;
@@ -458,9 +459,9 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task MultipleFilesMixedCsAndVbAndNotCsFormat()
     {
-        const string file1Path = @"Q:\cs\file1.cs";
-        const string file2Path = @"Q:\cs\file2.notcs";
-        const string file3Path = @"Q:\cs\nested\file3.vb";
+        const string file1Path = @"Q:/cs/file1.cs";
+        const string file2Path = @"Q:/cs/file2.notcs";
+        const string file3Path = @"Q:/cs/nested/file3.vb";
 
         var case1 = CSharpFormatTestCases.ManyXmlTokenKinds;
         var case2 = GeneralFormatTestCases.BreakElementPreservation;
@@ -519,15 +520,15 @@ public partial class FormatCommandTests : BaseCliTests
     [Test]
     public async Task MultipleFilesJapaneseFormat()
     {
-        const string file1Path = @"Q:\cs\file1.cs";
-        const string file2Path = @"Q:\cs\file2.cs";
+        const string file1Path = @"Q:/cs/file1.cs";
+        const string file2Path = @"Q:/cs/file2.cs";
 
         var encoding1 = Encoding.BigEndianUnicode;
         var encoding2 = Encoding.UTF32;
 
         var testCase = GeneralFormatTestCases.WithJapaneseText;
 
-        var source = testCase.Source.WithTrailingNewLine();
+        var source = testCase.Source.WithTrailingEnvironmentNewLine();
         var source1Bytes = encoding1.GetBytes(source);
         var source2Bytes = encoding2.GetBytes(source);
 
@@ -554,14 +555,14 @@ public partial class FormatCommandTests : BaseCliTests
         await Assert.That(result.ExitCode)
             .IsEqualTo((int)FormatCommand.ExecutionResult.Success);
 
-        var expected = testCase.Formatted.WithTrailingNewLine();
+        var expected = testCase.Formatted.WithTrailingEnvironmentNewLine();
 
         var newBytes1 = await fileSystem.File.ReadAllBytesAsync(file1Path);
-        var newText1 = encoding1.GetString(newBytes1);
+        var newText1 = encoding1.GetString(newBytes1).NormalizeEnvironmentNewLines();
         await Assert.That(newText1).IsEqualTo(expected);
 
         var newBytes2 = await fileSystem.File.ReadAllBytesAsync(file2Path);
-        var newText2 = encoding2.GetString(newBytes2);
+        var newText2 = encoding2.GetString(newBytes2).NormalizeEnvironmentNewLines();
         await Assert.That(newText2).IsEqualTo(expected);
     }
 
@@ -598,9 +599,9 @@ public partial class FormatCommandTests : BaseCliTests
     {
         await Assert.That(encoding).IsNotNull();
 
-        const string filePath = @"Q:\cs\file1.cs";
+        const string filePath = @"Q:/cs/file1.cs";
 
-        var source = testCase.Source.WithTrailingNewLine();
+        var source = testCase.Source.WithTrailingEnvironmentNewLine();
         var sourceBytes = encoding.GetBytes(source);
         var fileSystem = new MockFileSystem(
             new Dictionary<string, MockFileData>
@@ -620,8 +621,8 @@ public partial class FormatCommandTests : BaseCliTests
             .IsEqualTo((int)FormatCommand.ExecutionResult.Success);
 
         var newBytes = await fileSystem.File.ReadAllBytesAsync(filePath);
-        var newText = encoding.GetString(newBytes);
-        var expected = testCase.Formatted.WithTrailingNewLine();
+        var newText = encoding.GetString(newBytes).NormalizeEnvironmentNewLines();
+        var expected = testCase.Formatted.WithTrailingEnvironmentNewLine();
         await Assert.That(newText).IsEqualTo(expected);
     }
 
