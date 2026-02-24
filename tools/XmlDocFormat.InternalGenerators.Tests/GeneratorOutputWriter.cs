@@ -6,7 +6,7 @@ using XmlDocFormat.InternalGenerators.Tests.Testing;
 
 namespace XmlDocFormat.InternalGenerators.Tests;
 
-public class GeneratorOutputWriter : CSharpCodeBuilder
+public class GeneratorOutputWriter : CSharpCodeWriter
 {
     public static string GenerateSourceMappingsCode(GeneratedSourceMappings mappings)
     {
@@ -54,7 +54,7 @@ public class GeneratorOutputWriter : CSharpCodeBuilder
             var blockList = NewSeparatableBlockList();
             foreach (var mapping in mappings)
             {
-                blockList.SeparateBlock();
+                blockList.BeginNewBlock();
                 WriteMapping(mapping);
                 blockList.CommitBlock();
             }

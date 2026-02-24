@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.Runtime.InteropServices.ComTypes;
 using XmlDocFormat.Core;
 
 namespace XmlDocFormat.InternalGenerators;

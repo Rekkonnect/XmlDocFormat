@@ -34,7 +34,6 @@ public sealed class VisualBasicXmlDocFormatter(XmlDocFormatOptions options)
             {
                 var docTree = VisualBasicXmlDocTree.ParseFromDocumentationTrivia(docComment);
 
-                // TODO: Test
                 var token = trivia.Token;
                 var leading = token.LeadingTrivia;
                 var baseIndentation = GetBaseIndentation(leading, SyntaxKind.WhitespaceTrivia);

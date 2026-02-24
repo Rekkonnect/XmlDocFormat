@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 
 namespace XmlDocFormat.InternalGenerators;
 
-public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationSize = 4)
+public class CSharpCodeWriter(char indentationCharacter = ' ', int indentationSize = 4)
     : IndentedStringBuilder(indentationCharacter, indentationSize)
 {
     protected SeparatableBlockList GlobalSeparatableBlockList
@@ -14,9 +14,9 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
         get => field ??= NewSeparatableBlockList();
     }
 
-    public void SeparateBlock()
+    public void BeginNewBlock()
     {
-        GlobalSeparatableBlockList.SeparateBlock();
+        GlobalSeparatableBlockList.BeginNewBlock();
     }
 
     public void CommitBlock()
@@ -44,6 +44,7 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
         return scope;
     }
 
+    [Obsolete("For qualification, use the code builder to capture the context of extern aliases")]
     protected static string FullyQualifiedName(ITypeSymbol type)
     {
         var displayString = type.ToDisplayString();
@@ -53,12 +54,10 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
             return displayString;
         }
 
-        // TODO: Formally support generic type arguments too
-        // Right now, they are correctly shown but without the global:: prefix
         return $"global::{displayString}";
     }
 
-    protected static string ParameterPassExpression(IParameterSymbol parameter)
+    public static string ParameterPassExpression(IParameterSymbol parameter)
     {
         string prefix = parameter.RefKind switch
         {
@@ -114,12 +113,12 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
         }
     }
 
-    protected void WriteAccessibility(ISymbol symbol)
+    public void WriteAccessibility(ISymbol symbol)
     {
         WriteAccessibility(symbol.DeclaredAccessibility);
     }
 
-    protected void WriteAccessibility(Accessibility accessibility)
+    public void WriteAccessibility(Accessibility accessibility)
     {
         var keyword = GetAccessibilityKeyword(accessibility);
         Append(keyword);
@@ -159,10 +158,10 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
 
     public sealed class TypeScope : IDisposable
     {
-        private readonly CSharpCodeBuilder _builder;
+        private readonly CSharpCodeWriter _builder;
         private int _nestingLevels;
 
-        public TypeScope(CSharpCodeBuilder builder, INamedTypeSymbol type)
+        public TypeScope(CSharpCodeWriter builder, INamedTypeSymbol type)
         {
             _builder = builder;
             var initialNesting = builder.NestingLevel;
@@ -220,7 +219,7 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
 
     public readonly struct BracketBlock : IDisposable
     {
-        private readonly CSharpCodeBuilder _builder;
+        private readonly CSharpCodeWriter _builder;
 
         private readonly char _close;
 
@@ -230,7 +229,7 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
             _builder = null!;
         }
 
-        public BracketBlock(CSharpCodeBuilder builder, char open, char close)
+        public BracketBlock(CSharpCodeWriter builder, char open, char close)
         {
             _builder = builder;
             _close = close;
@@ -245,23 +244,14 @@ public class CSharpCodeBuilder(char indentationCharacter = ' ', int indentationS
         }
     }
 
-    public sealed class SeparatableBlockList(CSharpCodeBuilder builder)
+    public sealed class SeparatableBlockList(CSharpCodeWriter builder)
+        : BaseSeparatableBlockList
     {
-        private readonly CSharpCodeBuilder _builder = builder;
+        private readonly CSharpCodeWriter _builder = builder;
 
-        private bool _hasPrevious = false;
-
-        public void SeparateBlock()
+        protected override void AppendSeparator()
         {
-            if (_hasPrevious)
-            {
-                _builder.AppendLine();
-            }
-        }
-
-        public void CommitBlock()
-        {
-            _hasPrevious = true;
+            _builder.AppendLine();
         }
     }
 }

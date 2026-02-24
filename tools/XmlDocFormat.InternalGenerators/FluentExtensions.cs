@@ -18,6 +18,17 @@ public static class FluentExtensions
         return selector(source);
     }
 
+    public static void IfNotNull<T>(
+        this T? source,
+        Action<T> action)
+        where T : class
+    {
+        if (source is not null)
+        {
+            action(source);
+        }
+    }
+
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source)
         where T : class
     {

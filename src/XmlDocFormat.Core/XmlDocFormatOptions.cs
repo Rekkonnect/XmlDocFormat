@@ -29,6 +29,4 @@ public class XmlDocFormatOptions
     /// meet the <see cref="MaxLineLength"/> requirement.
     /// </summary>
     public bool MergeContentLines { get; set; } = true;
-
-    // TODO: Add options to allow keeping a single line for some tags
 }
